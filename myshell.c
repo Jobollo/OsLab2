@@ -43,27 +43,27 @@ int main(int argc, char *argv[])
             // your code here
         }
 	// clr command -- clear the screen
-	if (strcmp(command, "clr") == 0)
+	else if (strcmp(command, "clr") == 0)
 	{
 	
 	}
 	// dir command -- list contents of directory
-	if (strcmp(command, "dir") == 0)
+	else if (strcmp(command, "dir") == 0)
 	{
 
 	}
 	// environ command -- list environmental strings
-	if (strcmp(command, "environ") == 0)
+	else if (strcmp(command, "environ") == 0)
 	{
 
 	}
 	// echo command -- display user comments
-	if (strcmp(command, "echo") == 0)
+	else if (strcmp(command, "echo") == 0)
 	{
 
 	}
 	// help command -- display user manual
-	if (strcmp(command, "help") == 0)
+	else if (strcmp(command, "help") == 0)
 	{
 		int c;
 		FILE *file;
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	// pause command -- pause operations until "Enter" is pressed
-	if (strcmp(command, "pause") == 0)
+	else if (strcmp(command, "pause") == 0)
 	{
 
 	}
