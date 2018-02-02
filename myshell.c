@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
+	buffer[strcspn(buffer, "\n")] = '\0';
+	strcat(command, buffer);
         // Perform string tokenization to get the command and argument
 
         // Check the command and execute the operations for each command
