@@ -32,30 +32,54 @@ int main(int argc, char *argv[])
 
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
-    {	
+    {
+        // Perform string tokenization to get the command and argument	
 	buffer[strcspn(buffer, "\n")] = '\0';
 	strcat(command, buffer);
-        // Perform string tokenization to get the command and argument
-
         // Check the command and execute the operations for each command
         // cd command -- change the current directory
         if (strcmp(command, "cd") == 0)
         {
             // your code here
         }
+	// clr command -- clear the screen
+	if (strcmp(command, "clr") == 0)
+	{
+	
+	}
+	// dir command -- list contents of directory
+	if (strcmp(command, "dir") == 0)
+	{
 
-        // other commands here...
+	}
+	// environ command -- list environmental strings
+	if (strcmp(command, "environ") == 0)
+	{
+
+	}
+	// echo command -- display user comments
+	if (strcmp(command, "echo") == 0)
+	{
+
+	}
+	// help command -- display user manual
 	if (strcmp(command, "help") == 0)
 	{
 		int c;
 		FILE *file;
 		file = fopen("README.md", "r");
-		if (file) {
+		if (file) 
+		{
 	    		while ((c = getc(file)) != EOF)
 	       			putchar(c);
 	    		fclose(file);
 		}
-        }
+	}
+	// pause command -- pause operations until "Enter" is pressed
+	if (strcmp(command, "pause") == 0)
+	{
+
+	}
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)
         {
