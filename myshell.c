@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
-    {
+    {	
 	buffer[strcspn(buffer, "\n")] = '\0';
 	strcat(command, buffer);
         // Perform string tokenization to get the command and argument
@@ -45,7 +45,17 @@ int main(int argc, char *argv[])
         }
 
         // other commands here...
-        
+	if (strcmp(command, "help") == 0)
+	{
+		int c;
+		FILE *file;
+		file = fopen("README.md", "r");
+		if (file) {
+	    		while ((c = getc(file)) != EOF)
+	       			putchar(c);
+	    		fclose(file);
+		}
+        }
         // quit command -- exit the shell
         else if (strcmp(command, "quit") == 0)
         {
@@ -57,6 +67,7 @@ int main(int argc, char *argv[])
         {
             fputs("Unsupported command, use help to display the manual\n", stderr);
         }
+	memset(command, 0, sizeof command);
     }
     return EXIT_SUCCESS;
 }
