@@ -13,6 +13,7 @@
 #include <string.h>
 #include "utility.h"
 #include "myshell.h"
+#include <errno.h>
 
 // Put macros or constants here using #define
 #define BUFFER_LEN 256
@@ -36,21 +37,29 @@ int main(int argc, char *argv[])
         // Perform string tokenization to get the command and argument	
 	buffer[strcspn(buffer, "\n")] = '\0';
 	strcat(command, buffer);
+	char* token = strtok(command, " ");
         // Check the command and execute the operations for each command
         // cd command -- change the current directory
-        if (strcmp(command, "cd") == 0)
+        if (strcmp(token, "cd") == 0)
         {
-            // your code here
+        	token = strtok(NULL, " ");
+		char *directory = token;
+		int ret;
+		ret = chdir (directory);	
         }
 	// clr command -- clear the screen
-	else if (strcmp(command, "clr") == 0)
+	else if (strcmp(token, "clr") == 0)
 	{
-	
+		system("clear");
 	}
 	// dir command -- list contents of directory
-	else if (strcmp(command, "dir") == 0)
+	else if (strcmp(token, "dir") == 0)
 	{
-
+		char cwd[256];
+    		if (getcwd(cwd, sizeof(cwd)) == NULL)
+      			perror("getcwd() error");
+    		else
+      			printf("current working directory is: %s\n", cwd);
 	}
 	// environ command -- list environmental strings
 	else if (strcmp(command, "environ") == 0)
@@ -63,7 +72,7 @@ int main(int argc, char *argv[])
 
 	}
 	// help command -- display user manual
-	else if (strcmp(command, "help") == 0)
+	else if (strcmp(token, "help") == 0)
 	{
 		int c;
 		FILE *file;
@@ -81,7 +90,7 @@ int main(int argc, char *argv[])
 
 	}
         // quit command -- exit the shell
-        else if (strcmp(command, "quit") == 0)
+        else if (strcmp(token, "quit") == 0)
         {
             return EXIT_SUCCESS;
         }
