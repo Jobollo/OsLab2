@@ -62,14 +62,23 @@ int main(int argc, char *argv[])
       			printf("current working directory is: %s\n", cwd);
 	}
 	// environ command -- list environmental strings
-	else if (strcmp(command, "environ") == 0)
+	else if (strcmp(token, "environ") == 0)
 	{
-
+		extern char **environ;
+		int i = 0;
+		while(environ[i]) {
+  			printf("%s\n", environ[i++]); // prints in form of "variable=value"
+}
 	}
 	// echo command -- display user comments
-	else if (strcmp(command, "echo") == 0)
+	else if (strcmp(token, "echo") == 0)
 	{
-
+		token = strtok(NULL, " ");
+		while( token != NULL ) {
+      			printf( "%s ", token );
+      			token = strtok(NULL, " ");
+  		}
+		printf("\n");
 	}
 	// help command -- display user manual
 	else if (strcmp(token, "help") == 0)
@@ -85,9 +94,13 @@ int main(int argc, char *argv[])
 		}
 	}
 	// pause command -- pause operations until "Enter" is pressed
-	else if (strcmp(command, "pause") == 0)
+	else if (strcmp(token, "pause") == 0)
 	{
-
+		char enter = 0;
+		while (enter != '\n') 
+		{ 
+		enter = getchar(); 
+		}	
 	}
         // quit command -- exit the shell
         else if (strcmp(token, "quit") == 0)
