@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 			if (strcmp(string, "cd") == 0)
 			{
 				string = strtok(NULL," ");
+				string[strcspn(string, "\n")] = '\0';
 				char *directory = string;
 				int ret;
 				ret = chdir (directory);	
