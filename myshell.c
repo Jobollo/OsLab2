@@ -46,29 +46,33 @@ int main(int argc, char *argv[])
 		{
 			if (strcmp(string, "cd") == 0)
 			{
-				token = strtok(NULL, " ");
-				char *directory = token;
+				string = strtok(NULL, " ");
+				string[strcspn(string, "\n")] = '\0';
+				char *directory = string;
 				char cwd[256];
-				DIR* dir = opendir(cwd);
-				if (dir)
-				{
-				    /* Directory exists. */
-				    chdir (directory);
-				    closedir(dir);
-				}
-				else if (argc<2)
+				DIR* dir;
+				if (string == NULL)
 				{
 				    printf("current working directory is: %s\n", getcwd(cwd,sizeof(cwd)));
-				    closedir(dir);
-				}
-				else if (ENOENT == errno)
-				{
-				    printf("Directory does not exist\n");
 				}
 				else
 				{
-				    printf("Error: invalid argument(s) for cd");
-				}	
+					dir = opendir(string);
+					if (dir)
+					{
+					    /* Directory exists. */
+					    chdir (directory);
+					    closedir(dir);
+					}
+					else if (ENOENT == errno)
+					{
+					    printf("Directory does not exist\n");
+					}
+					else
+					{
+					    printf("Error: invalid argument(s) for cd");
+					}
+				}
 			}
 			// clr command -- clear the screen
 			else if (strcmp(string, "clr") == 0)
@@ -139,6 +143,7 @@ int main(int argc, char *argv[])
 		}
 		char cwd[256];
 		printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
+		printf("\n");
         }
         fclose(fp);
 	return EXIT_SUCCESS;
@@ -156,29 +161,32 @@ int main(int argc, char *argv[])
         // cd command -- change the current directory
         if (strcmp(token, "cd") == 0)
         {
-        	token = strtok(NULL, " ");
+		token = strtok(NULL, " ");
 		char *directory = token;
 		char cwd[256];
-		DIR* dir = opendir(cwd);
-		if (dir)
-		{
-		    /* Directory exists. */
-		    chdir (directory);
-		    closedir(dir);
-		}
-		else if (argc<2)
+		DIR* dir;
+		if (token == NULL)
 		{
 		    printf("current working directory is: %s\n", getcwd(cwd,sizeof(cwd)));
-		    closedir(dir);
-		}
-		else if (ENOENT == errno)
-		{
-		    printf("Directory does not exist\n");
 		}
 		else
 		{
-		    printf("Error: invalid argument(s) for cd");
-		}	
+			dir = opendir(token);
+			if (dir)
+			{
+			    /* Directory exists. */
+			    chdir (directory);
+			    closedir(dir);
+			}
+			else if (ENOENT == errno)
+			{
+			    printf("Directory does not exist\n");
+			}
+			else
+			{
+			    printf("Error: invalid argument(s) for cd");
+			}
+		}
         }
 	// clr command -- clear the screen
 	else if (strcmp(token, "clr") == 0)
