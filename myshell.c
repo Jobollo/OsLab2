@@ -29,13 +29,15 @@ int main(int argc, char *argv[])
     char buffer[BUFFER_LEN] = { 0 };
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
-
+    char cwd[256];
     // Parse the commands provided using argc and argv
 
     if (argc > 1)
     {
 	char delimit[]=" \n";
         FILE* fp = fopen(argv[1],"r");
+	char cwd[256];
+	printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
         while(fgets(buffer,sizeof buffer,fp)!=NULL)
         {
 
@@ -44,11 +46,29 @@ int main(int argc, char *argv[])
 		{
 			if (strcmp(string, "cd") == 0)
 			{
-				string = strtok(NULL," ");
-				string[strcspn(string, "\n")] = '\0';
-				char *directory = string;
-				int ret;
-				ret = chdir (directory);	
+				token = strtok(NULL, " ");
+				char *directory = token;
+				char cwd[256];
+				DIR* dir = opendir(cwd);
+				if (dir)
+				{
+				    /* Directory exists. */
+				    chdir (directory);
+				    closedir(dir);
+				}
+				else if (argc<2)
+				{
+				    printf("current working directory is: %s\n", getcwd(cwd,sizeof(cwd)));
+				    closedir(dir);
+				}
+				else if (ENOENT == errno)
+				{
+				    printf("Directory does not exist\n");
+				}
+				else
+				{
+				    printf("Error: invalid argument(s) for cd");
+				}	
 			}
 			// clr command -- clear the screen
 			else if (strcmp(string, "clr") == 0)
@@ -117,12 +137,15 @@ int main(int argc, char *argv[])
 			}
 			string = strtok(NULL,"\n");
 		}
+		char cwd[256];
+		printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
         }
         fclose(fp);
 	return EXIT_SUCCESS;
     }
 
     // Perform an infinite loop getting command input from users
+    printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument	
@@ -135,8 +158,27 @@ int main(int argc, char *argv[])
         {
         	token = strtok(NULL, " ");
 		char *directory = token;
-		int ret;
-		ret = chdir (directory);	
+		char cwd[256];
+		DIR* dir = opendir(cwd);
+		if (dir)
+		{
+		    /* Directory exists. */
+		    chdir (directory);
+		    closedir(dir);
+		}
+		else if (argc<2)
+		{
+		    printf("current working directory is: %s\n", getcwd(cwd,sizeof(cwd)));
+		    closedir(dir);
+		}
+		else if (ENOENT == errno)
+		{
+		    printf("Directory does not exist\n");
+		}
+		else
+		{
+		    printf("Error: invalid argument(s) for cd");
+		}	
         }
 	// clr command -- clear the screen
 	else if (strcmp(token, "clr") == 0)
@@ -159,7 +201,7 @@ int main(int argc, char *argv[])
 		int i = 0;
 		while(environ[i]) {
   			printf("%s\n", environ[i++]); // prints in form of "variable=value"
-}
+		}
 	}
 	// echo command -- display user comments
 	else if (strcmp(token, "echo") == 0)
@@ -204,6 +246,8 @@ int main(int argc, char *argv[])
         {
             fputs("Unsupported command, use help to display the manual\n", stderr);
         }
+	char cwd[256];
+	printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
 	memset(command, 0, sizeof command);
     }
     return EXIT_SUCCESS;
