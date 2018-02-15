@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
     char cwd[256];
+    char* shellDir = strcat (getcwd(cwd,sizeof(cwd)),argv[0]);
+    setenv("SHELL", shellDir, 1);
     // Parse the commands provided using argc and argv
 
     if (argc > 1)
@@ -37,7 +39,7 @@ int main(int argc, char *argv[])
 	char delimit[]=" \n";
         FILE* fp = fopen(argv[1],"r");
 	char cwd[256];
-	printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
+	printf("%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
         while(fgets(buffer,sizeof buffer,fp)!=NULL)
         {
 
@@ -143,7 +145,7 @@ int main(int argc, char *argv[])
 			string = strtok(NULL,"\n");
 		}
 		char cwd[256];
-		printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
+		printf("%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
 		printf("\n");
         }
         fclose(fp);
@@ -151,7 +153,7 @@ int main(int argc, char *argv[])
     }
 
     // Perform an infinite loop getting command input from users
-    printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
+    printf("%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
     {
         // Perform string tokenization to get the command and argument	
@@ -257,7 +259,7 @@ int main(int argc, char *argv[])
             fputs("Unsupported command, use help to display the manual\n", stderr);
         }
 	char cwd[256];
-	printf("shell=%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
+	printf("%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
 	memset(command, 0, sizeof command);
     }
     return EXIT_SUCCESS;
