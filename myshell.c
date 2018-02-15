@@ -30,7 +30,8 @@ int main(int argc, char *argv[])
     char command[BUFFER_LEN] = { 0 };
     char arg[BUFFER_LEN] = { 0 };
     char cwd[256];
-    char* shellDir = strcat (getcwd(cwd,sizeof(cwd)),argv[0]);
+    char* programName = strtok(argv[0],".");
+    char* shellDir = strcat (getcwd(cwd,sizeof(cwd)),programName);
     setenv("SHELL", shellDir, 1);
     // Parse the commands provided using argc and argv
 
