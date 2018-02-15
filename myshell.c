@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
 					{
 					    /* Directory exists. */
 					    chdir (directory);
+					    setenv("PWD", getcwd(cwd,sizeof(cwd)),1);
 					    closedir(dir);
 					}
 					else if (ENOENT == errno)
@@ -176,6 +177,7 @@ int main(int argc, char *argv[])
 			{
 			    /* Directory exists. */
 			    chdir (directory);
+			    setenv("PWD", getcwd(cwd,sizeof(cwd)),1);
 			    closedir(dir);
 			}
 			else if (ENOENT == errno)
