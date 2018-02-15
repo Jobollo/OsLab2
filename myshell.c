@@ -14,6 +14,7 @@
 #include "utility.h"
 #include "myshell.h"
 #include <errno.h>
+#include <fnmatch.h>
 
 // Put macros or constants here using #define
 #define BUFFER_LEN 256
@@ -30,6 +31,95 @@ int main(int argc, char *argv[])
     char arg[BUFFER_LEN] = { 0 };
 
     // Parse the commands provided using argc and argv
+
+    if (argc > 1)
+    {
+	char delimit[]=" \n";
+        FILE* fp = fopen(argv[1],"r");
+        while(fgets(buffer,sizeof buffer,fp)!=NULL)
+        {
+
+		char* string = strtok(buffer,delimit);
+		while (string != NULL)
+		{
+			if (strcmp(string, "cd") == 0)
+			{
+				string = strtok(NULL," ");
+				char *directory = string;
+				int ret;
+				ret = chdir (directory);	
+			}
+			// clr command -- clear the screen
+			else if (strcmp(string, "clr") == 0)
+			{
+				system("clear");
+			}
+			// dir command -- list contents of directory
+			else if (strcmp(string, "dir") == 0)
+			{
+				char cwd[256];
+		    		if (getcwd(cwd, sizeof(cwd)) == NULL)
+		      			perror("getcwd() error");
+		    		else
+		      			printf("current working directory is: %s\n", cwd);
+			}
+			// environ command -- list environmental strings
+			else if (strcmp(string, "environ") == 0)
+			{
+				extern char **environ;
+				int j = 0;
+				while(environ[j]) {
+		  			printf("%s\n", environ[j++]); // prints in form of "variable=value"
+				}
+			}
+			// echo command -- display user comments
+			else if (strcmp(string, "echo") == 0)
+			{
+				while(fnmatch("*\n", string,0) != 0) {
+					string = strtok(NULL," ");
+		      			printf( "%s ", string );
+		  		}
+				printf("\n");
+			}
+			// help command -- display user manual
+			else if (strcmp(string, "help") == 0)
+			{
+				int c;
+				FILE *file;
+				file = fopen("README.md", "r");
+				if (file) 
+				{
+			    		while ((c = getc(file)) != EOF)
+			       			putchar(c);
+			    		fclose(file);
+				}
+			}
+			// pause command -- pause operations until "Enter" is pressed
+			else if (strcmp(string, "pause") == 0)
+			{
+				char enter = 0;
+				while (enter != '\n') 
+				{ 
+				enter = getchar(); 
+				}	
+			}
+			// quit command -- exit the shell
+			else if (strcmp(string, "quit") == 0)
+			{
+			    return EXIT_SUCCESS;
+			}
+
+			// Unsupported command
+			else
+			{
+			    fputs("Unsupported command, use help to display the manual\n", stderr);
+			}
+			string = strtok(NULL,"\n");
+		}
+        }
+        fclose(fp);
+	return EXIT_SUCCESS;
+    }
 
     // Perform an infinite loop getting command input from users
     while (fgets(buffer, BUFFER_LEN, stdin) != NULL)
