@@ -1,7 +1,7 @@
 /*
  * MyShell Project for SOFE 3950U / CSCI 3020U: Operating Systems
  *
- * Copyright (C) 2017, <GROUP MEMBERS>
+ * Copyright (C) 2017, Robert Amenta, Abdurrahman Ansari, Gian Basilio, Raynosan Edmond
  * All rights reserved.
  * 
  */
@@ -19,10 +19,7 @@
 // Put macros or constants here using #define
 #define BUFFER_LEN 256
 
-// Put global environment variables here
-
 // Define functions declared in myshell.h here
-
 int main(int argc, char *argv[])
 {
     // Input buffer and and commands
@@ -33,20 +30,22 @@ int main(int argc, char *argv[])
     char* programName = strtok(argv[0],".");
     char* shellDir = strcat (getcwd(cwd,sizeof(cwd)),programName);
     setenv("SHELL", shellDir, 1);
+	
     // Parse the commands provided using argc and argv
-
     if (argc > 1)
     {
+	// Read through given argument/program for shell commands
 	char delimit[]=" \n";
         FILE* fp = fopen(argv[1],"r");
 	char cwd[256];
 	printf("%s/%s: ",getcwd(cwd,sizeof(cwd)),argv[0]);
         while(fgets(buffer,sizeof buffer,fp)!=NULL)
         {
-
+		// String tokenizing
 		char* string = strtok(buffer,delimit);
 		while (string != NULL)
 		{
+			// cd command -- change the current working directory
 			if (strcmp(string, "cd") == 0)
 			{
 				string = strtok(NULL, " ");
@@ -162,6 +161,7 @@ int main(int argc, char *argv[])
 	strcat(command, buffer);
 	char* token = strtok(command, " ");
         // Check the command and execute the operations for each command
+	    
         // cd command -- change the current directory
         if (strcmp(token, "cd") == 0)
         {
